@@ -4,28 +4,19 @@ import QtQuick.Controls 1.4
 ApplicationWindow {
     width: 800
     height: 600
+    color: "skyblue"
 
     ListView {
         anchors.fill: parent
-        model: TestModel
+        model: TreeModel
 
-        
         Component.onCompleted: {
-            TestModel.append("1");
-            TestModel.append("2");
-            TestModel.append("3");
-            TestModel.append("4");
+            TreeModel.append("first");
+            TreeModel.append("second");
+            TreeModel.append("third");
+            TreeModel.append("fourth");
         }
 
-
-        delegate: Text {
-            text: model.text
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    model.text = "edited"
-                }
-            }
-        }
+        delegate: TreeItemView { }
     }
 }

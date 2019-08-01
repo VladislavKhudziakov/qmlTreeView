@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "TreeItem.h"
 #include <QAbstractListModel>
 
 class TestModel : public QAbstractListModel {

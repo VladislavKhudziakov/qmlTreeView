@@ -8,27 +8,34 @@
 class TreeItem : public QObject
 {
   Q_OBJECT;
-  Q_PROPERTY(QString data READ getData NOTIFY onDataChanged);
-//  Q_PROPERTY(QList<TreeItem*> children READ getChildren WRITE setChild NOTIFY onChildrenChanged);
+  Q_PROPERTY(QString data READ getData WRITE setData NOTIFY onDataChanged);
+  Q_PROPERTY(bool isOpened MEMBER m_isOpened NOTIFY onOpenStatusChange);
+  Q_PROPERTY(QList<QObject*> children READ getChildrenAsQObject NOTIFY onChildrenChanged);
 
 public:
   TreeItem() = default;
-  TreeItem(QString data, TreeItem* parent);
+  explicit TreeItem(QString data, TreeItem* parent = nullptr);
   TreeItem(const TreeItem&);
-  TreeItem(TreeItem&&) noexcept;
   TreeItem&operator=(const TreeItem&);
-  TreeItem&operator=(TreeItem&&) noexcept;
-
-  //todo remake when will contain pointers
-  ~TreeItem() override = default;
+  ~TreeItem() override;
 
   QString& getData();
+  void setData(const QString& data);
+
+  QList<QObject*> getChildrenAsQObject();
+  Q_INVOKABLE QList<TreeItem*> getChildren();
+  Q_INVOKABLE void appendChild(const QString&);
 
   signals:
-    void onDataChanged();
+    void onChildrenChanged(const QList<TreeItem*>&);
+    void onDataChanged(const QString&);
+    void onOpenStatusChange(bool);
 
 private:
   QString m_data;
+  QList<TreeItem*> m_children;
+  TreeItem* p_parent;
+  bool m_isOpened;
 };
 
 Q_DECLARE_METATYPE(TreeItem);
