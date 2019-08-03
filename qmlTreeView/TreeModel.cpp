@@ -19,6 +19,8 @@ TreeItem *createTreeItem(){
   return res;
 }
 
+
+
 TreeModel::TreeModel(QList<TreeItem*>  items, QObject *parent)
   : QObject(parent), m_tree(std::move(items))
 {
