@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(untitled)
+project(TreeView)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -15,6 +15,6 @@ endif()
 
 find_package(Qt5 COMPONENTS Core Quick Qml REQUIRED)
 
-add_executable(untitled main.cpp TreeItem.cpp TreeItem.h TreeModel.cpp TreeModel.h)
+add_executable(TreeView main.cpp TreeItem.cpp TreeItem.h TreeModel.cpp TreeModel.h)
 
-target_link_libraries(untitled Qt5::Core Qt5::Quick Qt5::Qml)
+target_link_libraries(TreeView Qt5::Core Qt5::Quick Qt5::Qml)
