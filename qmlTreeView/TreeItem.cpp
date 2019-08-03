@@ -62,12 +62,9 @@ void TreeItem::setData(const QString &data)
 
 QList<QObject*> TreeItem::getChildrenAsQObject()
 {
-  QList<QObject*> list;
-
-  for (auto item : m_children) {
-    list.push_back(item);
-  }
-  return list;
+  QList<QObject*> objects;
+  std::copy(m_children.begin(), m_children.end(), std::back_inserter(objects));
+  return objects;
 }
 
 
