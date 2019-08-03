@@ -9,81 +9,58 @@
 #include <utility>
 #include <QDebug>
 
-TreeModel::TreeModel(QVector <TreeItem*>  items, QObject *parent) : QAbstractListModel(parent), m_items(std::move(items))
-{
 
+const int number = 100;
+
+TreeItem *createTreeItem(){
+  auto res = new TreeItem(QString::number(qrand() % number));
+  while(qrand() % 2)
+    res->appendChild(createTreeItem());
+  return res;
+}
+
+TreeModel::TreeModel(QList<TreeItem*>  items, QObject *parent)
+  : QObject(parent), m_tree(std::move(items))
+{
+  m_tree.append(createTreeItem());
+  m_tree.append(createTreeItem());
+  m_tree.append(createTreeItem());
+  m_tree.append(createTreeItem());
+  m_tree.append(new TreeItem(QString::number(2)));
+  m_tree.append(new TreeItem(QString::number(3)));
+
+  connect(this, &TreeModel::treeChanged, [&]() {
+    qDebug() << "changed";
+  });
 }
 
 
 
 TreeModel::~TreeModel()
 {
-  qDeleteAll(m_items);
+  qDeleteAll(m_tree);
 }
 
 
 
-QVariant TreeModel::data(const QModelIndex &index, int role) const
+QList<TreeItem*>& TreeModel::getTree()
 {
-  if (index.isValid()) {
-    if (role == ItemRole) {
-      QVariant variant;
-      variant.setValue(*m_items.at(index.row()));
-      return variant;
-    }
-  }
-
-  return QVariant();
+  return m_tree;
 }
 
 
 
-int TreeModel::rowCount(const QModelIndex &parent) const
+QList<QObject*> TreeModel::getTreeAsQObject() const
 {
-  return m_items.count();
+  QList<QObject*> objects;
+  std::copy(m_tree.begin(), m_tree.end(), std::back_inserter(objects));
+  return objects;
 }
 
 
 
-QHash<int,QByteArray> TreeModel::roleNames() const
+void TreeModel::append(const QString &value)
 {
-  auto roles = QAbstractListModel::roleNames();
-  roles[ItemRole] = "item";
-
-  return roles;
-}
-
-
-
-void TreeModel::append(const TreeItem &value)
-{
-  beginInsertColumns(QModelIndex(), 0, 0);
-  m_items.push_back(new TreeItem(value));
-  endInsertRows();
-
-  auto index = createIndex(0, 0);
-  emit dataChanged(index, index);
-}
-
-
-
-
-void TreeModel::append(const QVariant &value)
-{
-  beginInsertColumns(QModelIndex(), 0, 0);
-  m_items.push_back(new TreeItem(value.toString()));
-  endInsertRows();
-
-  auto index = createIndex(0, 0);
-  emit dataChanged(index, index);
-}
-
-
-
-TreeItem *TreeModel::getTreeItem(int idx) {
-  if (idx < 0 || idx >= m_items.count()) {
-    return nullptr;
-  }
-
-  return m_items.at(idx);
+  m_tree.append(new TreeItem(value));
+  emit treeChanged();
 }

@@ -6,18 +6,20 @@ ApplicationWindow {
     height: 600
     color: "skyblue"
 
-    
-    ListView {
-        anchors.fill: parent
-        model: TreeModel
+    Column {
+        Repeater {
+            anchors.fill: parent
 
-        Component.onCompleted: {
-            TreeModel.append("first");
-            TreeModel.append("second");
-            TreeModel.append("third");
-            TreeModel.append("fourth");
+            model:TreeModel.tree
+
+            Component.onCompleted: {
+                TreeModel.append("first");
+                TreeModel.append("second");
+                TreeModel.append("third");
+                TreeModel.append("fourth");
+            }
+            
+            delegate: TreeItemView { }
         }
-
-        delegate: TreeItemView { }
     }
 }

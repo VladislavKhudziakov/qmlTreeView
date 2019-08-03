@@ -4,7 +4,6 @@
 #include <QQuickWindow>
 #include <QQmlContext>
 
-#include "TestModel.h"
 #include "TreeModel.h"
 #include "TreeItem.h"
 
@@ -13,9 +12,6 @@ int main(int argc, char** argv) {
 
   qmlRegisterType<TreeItem>();
   QQmlApplicationEngine engine;
-
-  TestModel test_model;
-  engine.rootContext()->setContextProperty("TestModel", &test_model);
 
   TreeModel tree_model;
   engine.rootContext()->setContextProperty("TreeModel", &tree_model);

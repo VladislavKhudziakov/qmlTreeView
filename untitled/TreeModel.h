@@ -3,31 +3,32 @@
 //
 
 #pragma once
-#include <QAbstractListModel>
+
+
+#include <QObject>
+#include <QVector>
+
 
 class TreeItem;
 
-
-class TreeModel : public QAbstractListModel
+class TreeModel : public QObject
 {
   Q_OBJECT;
+  Q_PROPERTY(QList<QObject*> tree READ getTreeAsQObject NOTIFY treeChanged)
 
 public:
-  enum Roles {
-    ItemRole = Qt::UserRole + 1
-  };
 
-  explicit TreeModel(QVector<TreeItem*>  items = QVector<TreeItem*>(), QObject* parent = nullptr);
-  ~TreeModel() override;
+  explicit TreeModel(QList<TreeItem*> items = QList<TreeItem*>(), QObject* parent = nullptr);
+  ~TreeModel() final;
 
-  Q_INVOKABLE [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
-  Q_INVOKABLE [[nodiscard]] int rowCount(const QModelIndex &parent) const override;
-  Q_INVOKABLE [[nodiscard]] QHash<int,QByteArray> roleNames() const override;
+  QList<TreeItem*>& getTree();
+  QList<QObject*> getTreeAsQObject() const;
 
-  Q_INVOKABLE void append(const TreeItem& value);
-  Q_INVOKABLE void append(const QVariant&);
-  Q_INVOKABLE TreeItem* getTreeItem(int);
+  Q_INVOKABLE void append(const QString& value);
+
+  signals:
+    void treeChanged();
 
 private:
-  QVector<TreeItem*> m_items;
+  QList<TreeItem*> m_tree;
 };

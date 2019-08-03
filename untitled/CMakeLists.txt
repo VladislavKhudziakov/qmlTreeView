@@ -15,6 +15,6 @@ endif()
 
 find_package(Qt5 COMPONENTS Core Quick Qml REQUIRED)
 
-add_executable(untitled main.cpp Test.cpp TestModel.cpp TreeItem.cpp TreeItem.h TreeModel.cpp TreeModel.h)
+add_executable(untitled main.cpp TreeItem.cpp TreeItem.h TreeModel.cpp TreeModel.h)
 
 target_link_libraries(untitled Qt5::Core Qt5::Quick Qt5::Qml)

@@ -13,7 +13,7 @@ class TreeItem : public QObject
   Q_PROPERTY(QList<QObject*> children READ getChildrenAsQObject NOTIFY onChildrenChanged);
 
 public:
-  TreeItem() = default;
+  TreeItem();
   explicit TreeItem(QString data, TreeItem* parent = nullptr);
   TreeItem(const TreeItem&);
   TreeItem&operator=(const TreeItem&);
@@ -25,6 +25,7 @@ public:
   QList<QObject*> getChildrenAsQObject();
   Q_INVOKABLE QList<TreeItem*> getChildren();
   Q_INVOKABLE void appendChild(const QString&);
+  Q_INVOKABLE void appendChild(TreeItem*);
 
   signals:
     void onChildrenChanged(const QList<TreeItem*>&);

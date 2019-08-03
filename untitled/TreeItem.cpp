@@ -4,6 +4,9 @@
 
 #include "TreeItem.h"
 
+
+TreeItem::TreeItem(): QObject(nullptr), m_data(), p_parent(), m_isOpened(false) {}
+
 TreeItem::TreeItem(QString data, TreeItem *parent)
   : QObject(parent), m_data(std::move(data)), p_parent(parent), m_isOpened(false) {}
 
@@ -56,6 +59,7 @@ QList<QObject*> TreeItem::getChildrenAsQObject()
 }
 
 
+
 QList<TreeItem*> TreeItem::getChildren()
 {
   return m_children;
@@ -67,4 +71,8 @@ void TreeItem::appendChild(const QString & data)
 {
   m_children.push_back(new TreeItem(data, this));
   emit onChildrenChanged(m_children);
+}
+void TreeItem::appendChild(TreeItem * child)
+{
+  m_children.append(child);
 }
